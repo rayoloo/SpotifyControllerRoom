@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-
+import HomePage from './HomePage'
 
 export default class App extends Component {
     constructor(props) {
@@ -8,7 +8,9 @@ export default class App extends Component {
 
     render() {
         return(
-            <h1>Testing React 1 Code!</h1>
+            <div>
+                <HomePage/>
+            </div>
         )
     }
 }
