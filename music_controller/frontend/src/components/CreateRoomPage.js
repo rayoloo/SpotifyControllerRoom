@@ -7,7 +7,8 @@ import {
     FormControl,
     Radio,
     RadioGroup,
-    FormControlLabel
+    FormControlLabel,
+    FormHelperText
     } from '@material-ui/core';
 import {Link} from 'react-router-dom';
 
@@ -24,11 +25,25 @@ export default class CreateRoomPage extends Component {
             // 1 x 8 px spacing between the grid
             //grid container
             <Grid container spacing={1}> 
-                <Grid item xs={12} align="center"></Grid>
-                {/* if you want to fill the width of the grid make it xs=12 since that the maximum number for this value*/}
+                <Grid item xs={12} align="center">
+                    {/* if you want to fill the width of the grid make it xs=12 since that the maximum size*/}
                     <Typography component='h4' variant='h4'>
-                        Create a room
+                        Create A Room
                     </Typography>
+                </Grid>
+                <Grid item xs={12} align="center">
+                    <FormControl component="fieldset">
+                        <FormHelperText>
+                            <div align="center">
+                                Guest Control of Playback State
+                            </div>
+                        </FormHelperText>
+                        <RadioGroup row defaultValue="true">
+                            <FormControlLabel value="true" control={<Radio color="primary"/>} label="Play/Pause" labelPlacement="bottom"/>
+                            <FormControlLabel value="false" control={<Radio color="secondary"/>} label="Play/Pause" labelPlacement="bottom"/>
+                        </RadioGroup>
+                    </FormControl>
+                </Grid>  
             </Grid>
         )
     }
