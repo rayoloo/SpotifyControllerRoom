@@ -3,7 +3,7 @@ import {
     Button, 
     Grid, 
     Typography, 
-    Textfield, 
+    TextField, 
     FormControl,
     Radio,
     RadioGroup,
@@ -14,7 +14,7 @@ import {Link} from 'react-router-dom';
 
 
 export default class CreateRoomPage extends Component {
-    defaultVote = 2
+    defaultVotes = 2
 
     constructor(props) {
         super(props)
@@ -43,6 +43,17 @@ export default class CreateRoomPage extends Component {
                             <FormControlLabel value="false" control={<Radio color="secondary"/>} label="Play/Pause" labelPlacement="bottom"/>
                         </RadioGroup>
                     </FormControl>
+                </Grid>
+                <Grid item xs={12} align="center">
+                    <FormControl>
+                        <TextField required={true} type="number" defaultValue={this.defaultVotes} inputProps={{min:1, style: {textAlign: 'center'}}} />
+                        <FormHelperText>
+                            <div align="center">Votes Required To Skip Song</div>
+                        </FormHelperText>
+                    </FormControl>
+                </Grid>
+                <Grid item xs={12} align="center">
+                    
                 </Grid>  
             </Grid>
         )
