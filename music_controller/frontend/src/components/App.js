@@ -12,15 +12,17 @@ export default class App extends Component {
 
     render() {
         return(
-            <Router>
-                <Switch>
-                    <Route exact path="/join" component={JoinRoomPage}/>
-                    <Route exact path="/create" component={CreateRoomPage}/>
-                    <Route exact path="/room/:roomCode" component={Room}/>
-                    {/* colon denotes that we have a parameter in the url */}
-                    <Route path="/" component={HomePage}></Route>
-                </Switch>
-            </Router>
+            <div className="center">
+                <Router >
+                    <Switch>
+                        <Route exact path="/join" component={JoinRoomPage}/>
+                        <Route exact path="/create" component={CreateRoomPage}/>
+                        <Route exact path="/room/:roomCode" component={Room}/>
+                        {/* colon denotes that we have a parameter in the url */}
+                        <Route path="/" component={HomePage}></Route>
+                    </Switch>
+                </Router>
+            </div>
         )
     }
 }
