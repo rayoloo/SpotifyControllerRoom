@@ -14,8 +14,6 @@ class RoomView(generics.ListAPIView):
 
 class CreateRoomView(APIView):
     serializer_class = CreateRoomSerializer
-
-    #Handle Post Request
     
     def post(self, request, format=None):
         # 1. Check if a session key already exist if not then create a new session key
@@ -36,20 +34,22 @@ class CreateRoomView(APIView):
                 room.guest_can_pause = guest_can_pause
                 room.votes_to_skip = votes_to_skip
                 room.save(update_fields=['guest_can_pause', 'votes_to_skip'])
+                self.request.session['room_code'] = room.code
                 return Response(RoomSerializer(room).data, status=status.HTTP_200_OK)
             else: #4b. Else create a new room with the new parameters
                 room = Room(host=host, guest_can_pause=guest_can_pause, votes_to_skip=votes_to_skip)
                 room.save()
+                self.request.session['room_code'] = room.code
                 return Response(RoomSerializer(room).data, status=status.HTTP_201_CREATED)
         # 3b. Response with a Bad Request status code
         return Response({'Bad Request': 'Invalid Data'}, status=status.HTTP_400_BAD_REQUEST)
 
 class GetRoom(APIView):
     serializer_class = RoomSerializer
-    lookup_url_kwarg = 'code'
+    url_kwarg = 'code'
 
     def get(self, request, format=None):
-        code = request.GET.get(self.lookup_url_kwarg)
+        code = request.GET.get(self.url_kwarg)
         if code != None:
             room = Room.objects.filter(code=code) # pylint: disable=maybe-no-member
             if len(room) > 0:
@@ -60,3 +60,21 @@ class GetRoom(APIView):
             return Response({'Room Not Found':'Invalid Room Code'}, status=status.HTTP_404_NOT_FOUND)
         
         return Response({'Bad Request':'Room code parameter not found in request'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class JoinRoom(APIView):
+    kwarg = "code"
+    def post(self, request, format=None):
+        if not self.request.session.exists(self.request.session.session_key):
+            self.request.session.create()
+        
+        code = request.data.get(self.kwarg)
+        if code != None:
+            rooms = Room.objects.filter(code=code) # pylint: disable=maybe-no-member
+            if len(rooms) > 0:
+                self.request.session['room_code'] = code
+                return Response({"message":"Room Joined"}, status=status.HTTP_200_OK)
+            else:
+                return Response({"message":"Room Not Found"}, status=status.HTTP_404_NOT_FOUND)
+        
+        return Response({"Bad Request":"Invalid Post Data"}, status=status.HTTP_400_BAD_REQUEST)

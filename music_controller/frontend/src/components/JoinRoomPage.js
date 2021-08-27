@@ -7,7 +7,8 @@ export default class JoinRoomPage extends Component {
         super(props)
         this.state ={
             roomCode:"", 
-            error: ""
+            error: false,
+            errorMSG:""
         }
     }
 
@@ -16,7 +17,24 @@ export default class JoinRoomPage extends Component {
     }
 
     roomButtonPressed = () =>{
-        
+        const roomCheck = {
+            method: "POST",
+            headers: {'Content-Type':'application/json'},
+            body: JSON.stringify({
+                code:this.state.roomCode
+            })
+        }
+        fetch("/api/join-room",roomCheck)
+            .then((response)=> {
+                if (response.ok) {
+                    this.props.history.push(`/room/${this.state.roomCode}`)
+                }
+                else {
+                    this.setState({error: true, errorMSG:"Room Not Found"})
+                }
+            }).catch((error) =>{
+                console.log(error)
+            })
     }
 
     render() {
@@ -33,16 +51,16 @@ export default class JoinRoomPage extends Component {
                         label="Code"
                         placeholder="Enter a Room Code"
                         value={this.state.roomCode}
-                        helperText={this.state.error}
+                        helperText={this.state.errorMSG}
                         variant="outlined"
                         onChange={this.handleTextFieldChange}
                     />
                 </Grid>
                 <Grid item xs={12} align="center">
-                    <Button variant="contained" color="primary" onClick={} component={Link}>Enter Room</Button>
+                    <Button variant="contained" color="primary" onClick={this.roomButtonPressed}>Enter Room</Button>
                 </Grid>
                 <Grid item xs={12} align="center">
-                    <Button variant="contained" color="secondary" to="/" component={Link}>Back</Button>
+                <Button color="secondary" variant="contained" to="/" component={Link}>Back</Button>
                 </Grid>
             </Grid>
         )
