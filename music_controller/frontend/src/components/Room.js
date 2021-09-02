@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Grid, Button, Typography } from '@material-ui/core'
+import CreateRoomPage from './CreateRoomPage'
 
 export default class Room extends Component {
 	constructor(props) {
@@ -8,14 +9,21 @@ export default class Room extends Component {
 			votesToSkip: 2,
 			guestCanPause: false,
 			isHost: false,
+			showSettings: false,
 		}
 		this.roomCode = this.props.match.params.roomCode
 		this.getRoomDetails() //get room details after getting the code from the url
 	}
 
-	getRoomDetails() {
+	getRoomDetails = () => {
 		fetch(`/api/get-room?code=${this.roomCode}`)
-			.then(response => response.json())
+			.then(response => {
+				if (!response.ok) {
+					this.props.leaveRoomCallback()
+					this.props.history.push('/')
+				}
+				return response.json()
+			})
 			.then(data => {
 				this.setState({
 					votesToSkip: data.votes_to_skip,
@@ -31,10 +39,54 @@ export default class Room extends Component {
 			headers: { 'Content-Type': 'application/json' },
 		}
 		fetch('/api/leave-room', leaveRoomPost).then(response => {
+			this.props.leaveRoomCallback()
 			this.props.history.push('/')
 		})
 	}
+
+	updateSettings = () => {
+		this.setState({ showSettings: !this.state.showSettings })
+	}
+
+	renderSettingsButton = () => {
+		return (
+			<Grid item xs={12}>
+				<Button
+					variant='contained'
+					color='primary'
+					onClick={this.updateSettings}>
+					Settings
+				</Button>
+			</Grid>
+		)
+	}
+
+	renderSettings = () => {
+		return (
+			<Grid container spacing={1} align='center'>
+				<CreateRoomPage
+					update={true}
+					votesToSkip={this.state.votesToSkip}
+					guestCanPause={this.state.guestCanPause}
+					roomCode={this.roomCode}
+					updateCallback={this.getRoomDetails}
+				/>
+				<Grid item xs={12}>
+					<Button
+						variant='contained'
+						color='secondary'
+						onClick={this.updateSettings}>
+						Close
+					</Button>
+				</Grid>
+			</Grid>
+		)
+	}
+
 	render() {
+		if (this.state.showSettings) {
+			return this.renderSettings()
+		}
 		return (
 			<Grid container spacing={1} align='center'>
 				<Grid item xs={12}>
@@ -44,12 +96,12 @@ export default class Room extends Component {
 				</Grid>
 				<Grid item xs={12}>
 					<Typography variant='h6' component='h6'>
-						Guest Can Pause: {this.state.guestCanPause.toString()}
+						Host: {this.state.isHost.toString()}
 					</Typography>
 				</Grid>
 				<Grid item xs={12}>
 					<Typography variant='h6' component='h6'>
-						Host: {this.state.isHost.toString()}
+						Guest Can Pause: {this.state.guestCanPause.toString()}
 					</Typography>
 				</Grid>
 				<Grid item xs={12}>
@@ -57,6 +109,7 @@ export default class Room extends Component {
 						Votes to Skip: {this.state.votesToSkip}
 					</Typography>
 				</Grid>
+				{this.state.isHost ? this.renderSettingsButton() : null}
 				<Grid item xs={12}>
 					<Button
 						color='secondary'

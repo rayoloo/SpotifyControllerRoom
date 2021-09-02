@@ -8,7 +8,7 @@ def generate_unique_code():
 
     while True:
         code = ''.join(random.choices(string.ascii_uppercase, k=length))
-        if Room.objects.filter(code=code).exists(): # pylint: disable=maybe-no-member
+        if not Room.objects.filter(code=code).exists():# pylint: disable=maybe-no-member
             break
 
     return code
