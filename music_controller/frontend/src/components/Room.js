@@ -17,6 +17,15 @@ export default class Room extends Component {
 		this.getRoomDetails() //get room details after getting the code from the url
 	}
 
+	componentDidMount() {
+		this.interval = setInterval(this.getCurrentSong,1000)
+	}
+
+	componentWillUnmount() {
+		clearInterval(this.interval)
+	}
+
+
 	getRoomDetails = () => {
 		fetch(`/api/get-room?code=${this.roomCode}`)
 			.then(response => {
@@ -52,6 +61,20 @@ export default class Room extends Component {
 						})
 				}
 			})
+	}
+
+	getCurrentSong = () => {
+		fetch('/spotify/get-current-song')
+		.then(response => {
+			if (response.ok){
+				return response.json()
+			}
+			else{
+				return {}
+			}
+		})
+		.then(data => this.setState({song: data}))
+		
 	}
 
 	leaveButtonPressed = () => {

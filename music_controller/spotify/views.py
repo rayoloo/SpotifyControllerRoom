@@ -6,7 +6,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from .util import update_or_create_user_tokens, is_spotify_authenticated, execute_spotify_api_request
 from api.models import Room
-import logging
+
 
 class AuthURL(APIView):
     def get(self, request, fornat=None):
