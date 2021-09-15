@@ -11,6 +11,7 @@ export default class Room extends Component {
 			isHost: false,
 			showSettings: false,
 			spotifyAuthenticated: false,
+			song: {},
 		}
 		this.roomCode = this.props.match.params.roomCode
 		this.getRoomDetails() //get room details after getting the code from the url
@@ -114,21 +115,7 @@ export default class Room extends Component {
 						Code: {this.roomCode}
 					</Typography>
 				</Grid>
-				<Grid item xs={12}>
-					<Typography variant='h6' component='h6'>
-						Host: {this.state.isHost.toString()}
-					</Typography>
-				</Grid>
-				<Grid item xs={12}>
-					<Typography variant='h6' component='h6'>
-						Guest Can Pause: {this.state.guestCanPause.toString()}
-					</Typography>
-				</Grid>
-				<Grid item xs={12}>
-					<Typography variant='h6' component='h6'>
-						Votes to Skip: {this.state.votesToSkip}
-					</Typography>
-				</Grid>
+
 				{this.state.isHost ? this.renderSettingsButton() : null}
 				<Grid item xs={12}>
 					<Button
