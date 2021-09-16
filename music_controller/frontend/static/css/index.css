@@ -1,18 +1,28 @@
-html, body{
-    height: 100%;
-    margin: 0;
-    padding: 0;
+html,
+body {
+	height: 100%;
+	margin: 0;
+	padding: 0;
 }
 
-#main{
-    width: 100%;
-    height: 100%;
-    /* top: 20; */
+#main {
+	width: 100%;
+	height: 100%;
+	/* top: 20; */
 }
 
-.center{
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+.center {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+body {
+	background: rgb(2, 0, 36);
+	background: linear-gradient(
+		90deg,
+		rgba(237, 23, 255, 1) 0%,
+		rgba(0, 212, 255, 1) 100%
+	);
 }

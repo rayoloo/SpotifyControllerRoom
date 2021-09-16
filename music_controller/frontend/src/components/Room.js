@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import { Grid, Button, Typography } from '@material-ui/core'
 import CreateRoomPage from './CreateRoomPage'
+import MusicPlayer from './MusicPlayer'
+import SpotifyPlayer from 'react-spotify-web-playback'
 
 export default class Room extends Component {
 	constructor(props) {
@@ -18,13 +20,12 @@ export default class Room extends Component {
 	}
 
 	componentDidMount() {
-		this.interval = setInterval(this.getCurrentSong,1000)
+		this.interval = setInterval(this.getCurrentSong, 1000)
 	}
 
 	componentWillUnmount() {
 		clearInterval(this.interval)
 	}
-
 
 	getRoomDetails = () => {
 		fetch(`/api/get-room?code=${this.roomCode}`)
@@ -64,17 +65,15 @@ export default class Room extends Component {
 	}
 
 	getCurrentSong = () => {
-		fetch('/spotify/get-current-song')
-		.then(response => {
-			if (response.ok){
-				return response.json()
-			}
-			else{
-				return {}
-			}
-		})
-		.then(data => this.setState({song: data}))
-		
+		fetch('/spotify/current-song')
+			.then(response => {
+				if (response.ok) {
+					return response.json()
+				} else {
+					return {}
+				}
+			})
+			.then(data => this.setState({ song: data }))
 	}
 
 	leaveButtonPressed = () => {
@@ -135,10 +134,16 @@ export default class Room extends Component {
 			<Grid container spacing={1} align='center'>
 				<Grid item xs={12}>
 					<Typography variant='h4' component='h4'>
-						Code: {this.roomCode}
+						Room Code: {this.roomCode}
 					</Typography>
+					<br />
 				</Grid>
-
+				<Grid item xs={12}>
+					<MusicPlayer {...this.state.song} />
+				</Grid>
+				<Grid item xs={12}>
+					<SpotifyPlayer token='BQBUPR6E_ckajDv_69WKCTL4G7QC0mZijl0Ps72lZoEmZEi4jvXgTsisQiFzhWlHeUu7rs9Km9B1Xku7GpXoflxAoRz_WULbWILU7iS-EyCXOaNspS4FOVgbp-NQMzgcrRP-KcLjwfKrMJ9KzipOtK3kX5zqFQ' />
+				</Grid>
 				{this.state.isHost ? this.renderSettingsButton() : null}
 				<Grid item xs={12}>
 					<Button
