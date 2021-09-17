@@ -39,47 +39,6 @@ export default class MusicPlayer extends Component {
 
 	render() {
 		const songProgress = (this.props.time / this.props.duration) * 100
-
-		window.onSpotifyWebPlaybackSDKReady = () => {
-			//need to find a way to get this everytime
-			const token =
-				'BQDtuU0gr3MVPY2h3nXMsZa0QZGTqVzHQnFlVD-Q7rjoeBrVX-KV65oDTBqOiMAE5_BkRbUpsawXPj08aaVBdqeKK26Zl3_u5IeOQORlly1RlaRyGLsho7kwfDo-PUnKyA-4G-NMQFJ8KCuT07058DsPdebQckAiWygxmf134hz0gN1knUvXtsTrZaSbmRv5xknqv8Xor7XO6VjpjA'
-
-			const player = new Spotify.Player({
-				name: 'Web Playback SDK Quick Start Player',
-				getOAuthToken: cb => {
-					cb(token)
-				},
-				volume: 0.5,
-			})
-
-			// Ready
-			player.addListener('ready', ({ device_id }) => {
-				console.log('Ready with Device ID', device_id)
-			})
-
-			// Not Ready
-			player.addListener('not_ready', ({ device_id }) => {
-				console.log('Device ID has gone offline', device_id)
-			})
-
-			player.addListener('initialization_error', ({ message }) => {
-				console.error(message)
-			})
-
-			player.addListener('authentication_error', ({ message }) => {
-				console.error(message)
-			})
-
-			player.addListener('account_error', ({ message }) => {
-				console.error(message)
-			})
-
-			player.connect()
-			player.togglePlay()
-			this.playSong()
-		}
-
 		return (
 			<Card>
 				<Grid container alignItems='center'>
